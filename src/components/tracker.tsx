@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CATEGORIES, LAST_DATA_UPDATE, type Item } from "@/data/checklist";
 import { progress, useProgress } from "@/lib/progress";
@@ -18,9 +19,8 @@ function Bar({ value }: { value: number }) {
   );
 }
 
-export function Tracker() {
+export function Tracker({ active }: { active: string }) {
   const p = useProgress();
-  const [active, setActive] = useState(CATEGORIES[0].id);
   const [filter, setFilter] = useState<Filter>("tous");
   const [query, setQuery] = useState("");
   const [newItem, setNewItem] = useState("");
@@ -82,9 +82,11 @@ export function Tracker() {
             const d = list.filter((i) => p.done[i.id]).length;
             const isActive = c.id === active;
             return (
-              <button
+              <Link
                 key={c.id}
-                onClick={() => setActive(c.id)}
+                href={`/suivi/${c.id}`}
+                scroll={false}
+                aria-current={isActive ? "page" : undefined}
                 className={`shrink-0 rounded-xl border px-4 py-3 text-left transition lg:w-full ${
                   isActive ? "border-pink bg-panel-2" : "border-edge bg-panel hover:border-dim"
                 }`}
@@ -96,7 +98,7 @@ export function Tracker() {
                 <span className="mt-2 hidden lg:block">
                   <Bar value={pct(d, list.length)} />
                 </span>
-              </button>
+              </Link>
             );
           })}
         </nav>

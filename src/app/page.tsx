@@ -1,6 +1,25 @@
 import Link from "next/link";
 import { Footer, Header } from "@/components/site";
 
+const FAQ = [
+  {
+    q: "Quand sort GTA 6 ?",
+    a: "GTA 6 sort le jeudi 19 novembre 2026 sur PlayStation 5 et Xbox Series X|S. Aucune version PC n'est annoncée pour la sortie.",
+  },
+  {
+    q: "La checklist est-elle gratuite ?",
+    a: "Oui, entièrement gratuite et sans inscription. Votre progression est enregistrée dans votre navigateur.",
+  },
+  {
+    q: "Comment retrouver ma progression sur mon téléphone ?",
+    a: "Dans « Ma progression », ouvrez « Sauvegarder ou transférer », copiez votre code et collez-le sur votre autre appareil.",
+  },
+  {
+    q: "Quand les listes seront-elles complètes ?",
+    a: "Les listes (missions, objets à collectionner, trophées…) sont ajoutées à partir de la sortie du jeu et complétées au fil des découvertes des joueurs.",
+  },
+];
+
 const FEATURES = [
   { icon: "✅", title: "Cochez au fil du jeu", text: "Missions, objets à collectionner, activités, trophées : tout au même endroit, rangé par catégorie." },
   { icon: "📊", title: "Votre % en temps réel", text: "Voyez d'un coup d'œil ce qui reste à faire pour atteindre le 100 %." },
@@ -24,7 +43,7 @@ export default function Home() {
             Ne passez plus à côté de rien.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link href="/suivi" className="btn-primary px-6 py-3 text-base">Commencer ma checklist</Link>
+            <Link href="/suivi/histoire" className="btn-primary px-6 py-3 text-base">Commencer ma checklist</Link>
           </div>
           <p className="mt-4 text-sm text-dim">Sortie du jeu le 19 novembre 2026 · listes mises à jour au fil des découvertes</p>
         </section>
@@ -37,6 +56,32 @@ export default function Home() {
               <p className="mt-2 text-sm text-dim">{f.text}</p>
             </div>
           ))}
+        </section>
+
+        <section className="mx-auto mt-16 max-w-3xl px-4 sm:px-6">
+          <h2 className="text-center font-display text-xl sm:text-2xl">Questions fréquentes</h2>
+          <div className="mt-6 space-y-3">
+            {FAQ.map((f) => (
+              <details key={f.q} className="panel p-5">
+                <summary className="cursor-pointer font-semibold">{f.q}</summary>
+                <p className="mt-3 text-sm text-dim">{f.a}</p>
+              </details>
+            ))}
+          </div>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: FAQ.map((f) => ({
+                  "@type": "Question",
+                  name: f.q,
+                  acceptedAnswer: { "@type": "Answer", text: f.a },
+                })),
+              }),
+            }}
+          />
         </section>
       </main>
       <Footer />
