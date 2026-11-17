@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-night: #0d0b14;
+  --color-panel: #17131f;
+  --color-panel-2: #201a2b;
+  --color-edge: #2e2640;
+  --color-text: #f3eefc;
+  --color-dim: #a39cb5;
+  --color-sun: #ff8a3d;
+  --color-pink: #ff4f8b;
+  --color-teal: #2ee6c5;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-display-face);
+}
+
+body {
+  background: var(--color-night);
+  color: var(--color-text);
+}
+
+@utility glow-text {
+  background: linear-gradient(90deg, var(--color-sun), var(--color-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition disabled:opacity-50;
+}
+
+@utility btn-primary {
+  @apply btn bg-gradient-to-r from-sun to-pink text-night hover:brightness-110;
+}
+
+@utility btn-ghost {
+  @apply btn border border-edge bg-panel text-text hover:border-dim;
+}
+
+@utility panel {
+  @apply rounded-2xl border border-edge bg-panel;
+}
+
+@utility field {
+  @apply w-full rounded-xl border border-edge bg-night px-3.5 py-2.5 text-sm text-text outline-none placeholder:text-dim/70 focus:border-pink;
+}
