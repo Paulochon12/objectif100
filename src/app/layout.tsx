@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import { Geist, Rubik_Mono_One } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const display = Rubik_Mono_One({ variable: "--font-display-face", subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", locale: "fr_FR", siteName: SITE_NAME },
+  twitter: { card: "summary_large_image" },
   title: {
     default: "Objectif 100 % : suivez votre progression dans GTA 6",
     template: "%s · Objectif 100 %",
@@ -17,7 +24,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${geist.variable} ${display.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col font-sans">{children}</body>
+      <body className="flex min-h-full flex-col font-sans">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

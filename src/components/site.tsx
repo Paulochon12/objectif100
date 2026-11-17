@@ -12,7 +12,7 @@ export function Header() {
   return (
     <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
       <Brand />
-      <Link href="/suivi" className="btn-primary">Ma progression</Link>
+      <Link href="/suivi/histoire" className="btn-primary">Ma progression</Link>
     </header>
   );
 }

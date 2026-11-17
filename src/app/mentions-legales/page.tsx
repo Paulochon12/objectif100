@@ -27,7 +27,8 @@ export default function MentionsLegales() {
           <p className="mt-2 text-dim">
             Le site ne demande aucun compte et ne collecte aucune donnée personnelle. Votre progression est
             enregistrée uniquement dans votre navigateur (stockage local) et n&apos;est jamais envoyée sur nos
-            serveurs. Aucun cookie publicitaire ni de mesure d&apos;audience n&apos;est utilisé.
+            serveurs. La fréquentation est mesurée avec Vercel Web Analytics, sans cookie et de façon
+            anonyme (aucune donnée ne permet de vous identifier). Aucun cookie publicitaire n&apos;est utilisé.
           </p>
         </section>
         <section>
