@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { CATEGORIES, LAST_DATA_UPDATE, type Item } from "@/data/checklist";
+import { getCategories, LAST_DATA_UPDATE, type Item } from "@/data/checklist";
+import { DICT, localePath, type Dict, type Lang } from "@/lib/i18n";
 import { progress, useProgress } from "@/lib/progress";
 
 type Filter = "tous" | "a-faire" | "faits";
@@ -19,7 +20,9 @@ function Bar({ value }: { value: number }) {
   );
 }
 
-export function Tracker({ active }: { active: string }) {
+export function Tracker({ lang, active }: { lang: Lang; active: string }) {
+  const t = DICT[lang];
+  const CATEGORIES = useMemo(() => getCategories(lang), [lang]);
   const p = useProgress();
   const [filter, setFilter] = useState<Filter>("tous");
   const [query, setQuery] = useState("");
@@ -35,7 +38,7 @@ export function Tracker({ active }: { active: string }) {
       ];
     }
     return out;
-  }, [p]);
+  }, [p, CATEGORIES]);
 
   const all = Object.values(lists).flat();
   const totalDone = all.filter((i) => p.done[i.id]).length;
@@ -60,13 +63,13 @@ export function Tracker({ active }: { active: string }) {
       <section className="panel p-5 sm:p-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <p className="text-sm text-dim">Progression globale</p>
+            <p className="text-sm text-dim">{t.overall}</p>
             <p className="font-display text-4xl">
               <span className="glow-text">{pct(totalDone, all.length)}%</span>
             </p>
           </div>
           <p className="text-sm text-dim">
-            {totalDone} / {all.length} objectifs
+            {totalDone} / {all.length} {t.goals}
           </p>
         </div>
         <div className="mt-4">
@@ -84,7 +87,7 @@ export function Tracker({ active }: { active: string }) {
             return (
               <Link
                 key={c.id}
-                href={`/suivi/${c.id}`}
+                href={localePath(lang, `/suivi/${c.id}`)}
                 scroll={false}
                 aria-current={isActive ? "page" : undefined}
                 className={`shrink-0 rounded-xl border px-4 py-3 text-left transition lg:w-full ${
@@ -93,7 +96,7 @@ export function Tracker({ active }: { active: string }) {
               >
                 <span className="flex items-center justify-between gap-3 text-sm font-semibold">
                   <span className="whitespace-nowrap">{c.icon} {c.name}</span>
-                  <span className="text-xs font-normal text-dim">{list.length ? `${d}/${list.length}` : "bientôt"}</span>
+                  <span className="text-xs font-normal text-dim">{list.length ? `${d}/${list.length}` : t.soon}</span>
                 </span>
                 <span className="mt-2 hidden lg:block">
                   <Bar value={pct(d, list.length)} />
@@ -109,8 +112,7 @@ export function Tracker({ active }: { active: string }) {
 
           {category.items.length === 0 && category.id !== "perso" && (
             <p className="mt-4 rounded-xl border border-sun/30 bg-sun/10 px-4 py-3 text-sm">
-              La liste complète arrive dès la sortie du jeu, mise à jour au fil des découvertes. En attendant,
-              ajoutez vos propres objectifs ci-dessous : votre progression sera conservée.
+              {t.emptyList}
             </p>
           )}
 
@@ -118,9 +120,9 @@ export function Tracker({ active }: { active: string }) {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Rechercher…"
+              placeholder={t.search}
               className="field sm:max-w-xs"
-              aria-label="Rechercher un objectif"
+              aria-label={t.searchLabel}
             />
             <div className="flex rounded-xl border border-edge bg-night p-1 text-sm">
               {(["tous", "a-faire", "faits"] as Filter[]).map((f) => (
@@ -129,7 +131,7 @@ export function Tracker({ active }: { active: string }) {
                   onClick={() => setFilter(f)}
                   className={`flex-1 rounded-lg px-3 py-1.5 whitespace-nowrap ${filter === f ? "bg-panel-2 text-text" : "text-dim"}`}
                 >
-                  {f === "tous" ? "Tous" : f === "a-faire" ? "À faire" : "Faits"}
+                  {t.filters[f]}
                 </button>
               ))}
             </div>
@@ -143,7 +145,7 @@ export function Tracker({ active }: { active: string }) {
                   <button
                     onClick={() => progress.toggle(item.id)}
                     aria-pressed={done}
-                    aria-label={`${done ? "Décocher" : "Cocher"} : ${item.name}`}
+                    aria-label={`${done ? t.uncheck : t.check} : ${item.name}`}
                     className={`grid size-7 shrink-0 place-items-center rounded-lg border-2 text-sm font-bold transition ${
                       done ? "border-teal bg-teal text-night" : "border-edge hover:border-teal"
                     }`}
@@ -158,39 +160,39 @@ export function Tracker({ active }: { active: string }) {
                     <button
                       onClick={() => progress.remove(category.id, item.id, item.custom)}
                       className="text-xs text-dim opacity-100 hover:text-pink sm:opacity-0 sm:group-hover:opacity-100"
-                      aria-label={`Supprimer : ${item.name}`}
+                      aria-label={`${t.remove} : ${item.name}`}
                     >
-                      Supprimer
+                      {t.remove}
                     </button>
                   )}
                 </li>
               );
             })}
-            {shown.length === 0 && items.length > 0 && <li className="py-6 text-center text-sm text-dim">Aucun résultat.</li>}
+            {shown.length === 0 && items.length > 0 && <li className="py-6 text-center text-sm text-dim">{t.noResult}</li>}
           </ul>
 
           <form onSubmit={add} className="mt-4 flex gap-2">
             <input
               value={newItem}
               onChange={(e) => setNewItem(e.target.value)}
-              placeholder="Ajouter un objectif personnel…"
+              placeholder={t.addPlaceholder}
               className="field"
               maxLength={120}
-              aria-label="Nouvel objectif"
+              aria-label={t.addLabel}
             />
-            <button className="btn-ghost shrink-0" type="submit">Ajouter</button>
+            <button className="btn-ghost shrink-0" type="submit">{t.add}</button>
           </form>
 
-          <p className="mt-6 text-xs text-dim">Listes mises à jour le {LAST_DATA_UPDATE}.</p>
+          <p className="mt-6 text-xs text-dim">{t.updated} {LAST_DATA_UPDATE[lang]}.</p>
         </section>
       </div>
 
-      <SaveTools />
+      <SaveTools t={t.save} />
     </div>
   );
 }
 
-function SaveTools() {
+function SaveTools({ t }: { t: Dict["save"] }) {
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
 
@@ -199,47 +201,46 @@ function SaveTools() {
     setCode(c);
     try {
       await navigator.clipboard.writeText(c);
-      setMessage("Code copié ! Collez-le sur votre autre appareil.");
+      setMessage(t.copied);
     } catch {
-      setMessage("Copiez le code ci-dessous.");
+      setMessage(t.copyBelow);
     }
   }
 
   function importCode() {
     try {
       progress.importCode(code);
-      setMessage("Progression importée ✓");
+      setMessage(t.imported);
     } catch {
-      setMessage("Ce code n'est pas valide.");
+      setMessage(t.invalid);
     }
   }
 
   return (
     <details className="panel p-5 sm:p-6">
-      <summary className="cursor-pointer font-semibold">💾 Sauvegarder ou transférer ma progression</summary>
+      <summary className="cursor-pointer font-semibold">{t.title}</summary>
       <p className="mt-3 text-sm text-dim">
-        Votre progression est enregistrée automatiquement dans ce navigateur, sans compte. Pour la retrouver sur
-        un autre appareil (téléphone, ordinateur), copiez votre code puis collez-le là-bas.
+        {t.text}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
-        <button onClick={copyCode} className="btn-ghost">Copier mon code</button>
-        <button onClick={importCode} className="btn-ghost" disabled={!code.trim()}>Importer ce code</button>
+        <button onClick={copyCode} className="btn-ghost">{t.copy}</button>
+        <button onClick={importCode} className="btn-ghost" disabled={!code.trim()}>{t.import}</button>
         <button
           onClick={() => {
-            if (confirm("Effacer toute votre progression ? Cette action est définitive.")) progress.reset();
+            if (confirm(t.confirmReset)) progress.reset();
           }}
           className="btn-ghost text-pink"
         >
-          Tout effacer
+          {t.reset}
         </button>
       </div>
       <textarea
         value={code}
         onChange={(e) => setCode(e.target.value)}
         rows={3}
-        placeholder="Collez ici un code de sauvegarde…"
+        placeholder={t.placeholder}
         className="field mt-3 font-mono text-xs"
-        aria-label="Code de sauvegarde"
+        aria-label={t.label}
       />
       {message && <p className="mt-2 text-sm text-teal">{message}</p>}
     </details>
