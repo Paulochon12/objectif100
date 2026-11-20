@@ -109,7 +109,7 @@ const LEGAL = {
     sections: [
       {
         h: "Éditeur",
-        p: ["Paul Lesage, entrepreneur individuel (micro-entreprise)", "28 rue Salvador Allende, 92000 Nanterre", "SIRET : [en cours d'attribution]", "Contact : [À COMPLÉTER]"],
+        p: ["Paul Lesage, entrepreneur individuel (micro-entreprise)", "28 rue Salvador Allende, 92000 Nanterre", "SIRET : [en cours d'attribution]", "Contact : contact@wise-studio.fr"],
       },
       { h: "Hébergeur", p: ["Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis"] },
       {
@@ -131,7 +131,7 @@ const LEGAL = {
     sections: [
       {
         h: "Publisher",
-        p: ["Paul Lesage, sole trader (micro-entreprise, France)", "28 rue Salvador Allende, 92000 Nanterre, France", "SIRET: [pending]", "Contact: [TO BE COMPLETED]"],
+        p: ["Paul Lesage, sole trader (micro-entreprise, France)", "28 rue Salvador Allende, 92000 Nanterre, France", "SIRET: [pending]", "Contact: contact@wise-studio.fr"],
       },
       { h: "Host", p: ["Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA"] },
       {
