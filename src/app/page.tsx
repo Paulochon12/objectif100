@@ -4,7 +4,7 @@ import { Footer, Header } from "@/components/site";
 const FAQ = [
   {
     q: "Quand sort GTA 6 ?",
-    a: "GTA 6 sort le jeudi 19 novembre 2026 sur PlayStation 5 et Xbox Series X|S. Aucune version PC n'est annoncée pour la sortie.",
+    a: "GTA 6 est sorti le jeudi 19 novembre 2026 sur PlayStation 5 et Xbox Series X|S. La version PC n'a pas encore de date.",
   },
   {
     q: "La checklist est-elle gratuite ?",
@@ -16,7 +16,7 @@ const FAQ = [
   },
   {
     q: "Quand les listes seront-elles complètes ?",
-    a: "Les listes (missions, objets à collectionner, trophées…) sont ajoutées à partir de la sortie du jeu et complétées au fil des découvertes des joueurs.",
+    a: "Les 55 trophées, les missions de l'histoire et des inconnus, les objets à collectionner et les activités du 100 % sont en ligne. Les listes sont corrigées au fil des découvertes des joueurs.",
   },
 ];
 
